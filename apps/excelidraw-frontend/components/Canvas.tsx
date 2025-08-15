@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { initDraw } from "@/app/draw";
 import { Socket } from "dgram";
 
-export function Canvas({roomId}: {roomId: string}) {
+export function Canvas({roomId,socket}: {roomId: string, socket: WebSocket}) {
     const canvasRef= useRef<HTMLCanvasElement>(null);
       useEffect(()=>{
     if(canvasRef.current){

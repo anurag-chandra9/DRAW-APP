@@ -1,5 +1,5 @@
 "use client";
-//30min
+
 
 export function AuthPage({ isSignin }: { isSignin: boolean }) {
   return (

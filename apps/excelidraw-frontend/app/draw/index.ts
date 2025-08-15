@@ -61,7 +61,9 @@ export async function initDraw(canvas: HTMLCanvasElement,roomId:string,socket: W
     existingShapes.push(shape);
     
     socket.send(JSON.stringify({
-        shape
+        type: "chat",
+        message: JSON.stringify(shape),
+        roomId
     }));
   });
 
