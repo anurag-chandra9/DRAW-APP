@@ -53,7 +53,7 @@ wss.on('connection', function connection(ws, request) {
   })
 
   ws.on('message', async function message(data) {
-    let parsedData;
+    let parsedData: any;
     if (typeof data !== "string") {
       parsedData = JSON.parse(data.toString());
     } else {
@@ -80,23 +80,46 @@ wss.on('connection', function connection(ws, request) {
       const roomId = parsedData.roomId;
       const message = parsedData.message;
 
-      await Prismaclient.chat.create({
-        data: {
-          roomId: Number(roomId),
-          message,
-          userId
-        }
-      });
+      try {
+        // Verify user exists in database before creating chat
+        const userExists = await Prismaclient.user.findUnique({
+          where: { id: userId }
+        });
 
-      users.forEach(user => {
-        if (user.rooms.includes(roomId)) {
-          user.ws.send(JSON.stringify({
-            type: "chat",
-            message: message,
-            roomId
-          }))
+        if (!userExists) {
+          console.error(`User with id ${userId} not found in database`);
+          ws.send(JSON.stringify({
+            type: "error",
+            message: "User not found"
+          }));
+          return;
         }
-      })
+
+        // Create chat message without createdAt (it's auto-generated)
+        await Prismaclient.chat.create({
+          data: {
+            roomId: Number(roomId),
+            userId,
+            message,
+          }
+        });
+
+        users.forEach(user => {
+          if (user.rooms.includes(roomId)) {
+            user.ws.send(JSON.stringify({
+              type: "chat",
+              message: message,
+              roomId
+            }))
+          }
+        })
+      } catch (error) {
+        console.error('Error creating chat message:', error);
+        ws.send(JSON.stringify({
+          type: "error",
+          message: "Failed to send message"
+        }));
+      }
     }
 
   });

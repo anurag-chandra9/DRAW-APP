@@ -109,40 +109,31 @@ app.post("/room", middleware, async function (req, res){
 app.get("/chats/:roomId", async (req, res) => {
     try {
         const roomId = Number(req.params.roomId);
-        console.log(req.params.roomId);
+        console.log("Fetching chats for room:", roomId);
+
         const messages = await Prismaclient.chat.findMany({
-            where: {
-                roomId: roomId
-            },
-            orderBy: {
-                id: "desc"
-            },
+            where: { roomId },
+            orderBy: { id: "asc" }, // asc makes history replay in correct order
             take: 1000
         });
 
-        res.json({
-            messages
-        })
-    } catch(e) {
-        console.log(e);
-        res.json({
-            messages: []
-        })
+        // Safely parse each chat.message into a shape
+        const shapes = messages.map((msg) => {
+            try {
+                const parsed = JSON.parse(msg.message);
+                return parsed.shape;
+            } catch (e) {
+                console.warn("Failed to parse message:", msg.message);
+                return null;
+            }
+        }).filter(Boolean);
+
+        res.json({ shapes });
+    } catch (e) {
+        console.error("Error fetching chats:", e);
+        res.json({ shapes: [] });
     }
-    
-})
+});
 
-app.get("/room/:slug", async (req, res) => {
-    const slug = req.params.slug;
-    const room = await Prismaclient.room.findFirst({
-        where: {
-            slug
-        }
-    });
 
-    res.json({
-        room
-    })
-})
-
-app.listen(3002);
+app.listen(3001);

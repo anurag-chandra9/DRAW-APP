@@ -1,47 +1,23 @@
 "use client";
 
+export function AuthPage({isSignin}: {
+    isSignin: boolean
+}) {
+    return <div className="w-screen h-screen flex justify-center items-center">
+        <div className="p-6 m-2 bg-white rounded">
+            <div className="p-2">
+                <input type="text" placeholder="Email"></input>
+            </div>
+            <div className="p-2">
+                
+            </div>
 
-export function AuthPage({ isSignin }: { isSignin: boolean }) {
-  return (
-    <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
-        {/* Heading */}
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          {isSignin ? "Welcome Back 👋" : "Create an Account ✨"}
-        </h2>
+            <div className="pt-2">
+                <button className="bg-red-200 rounded p-2" onClick={() => {
 
-        {/* Form */}
-        <div className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-          />
-
-          {/* Submit Button */}
-          <button
-            onClick={() => {
-              // Add auth logic here
-            }}
-            className="w-full py-2 mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-200"
-          >
-            {isSignin ? "Sign In" : "Sign Up"}
-          </button>
+                }}>{isSignin ? "Sign in" : "Sign up"}</button>
+            </div>
         </div>
-
-        {/* Switch link */}
-        <p className="mt-4 text-sm text-center text-gray-600">
-          {isSignin ? "Don't have an account?" : "Already have an account?"}{" "}
-          <a href="#" className="text-indigo-600 hover:underline">
-            {isSignin ? "Sign Up" : "Sign In"}
-          </a>
-        </p>
-      </div>
     </div>
-  );
+
 }
