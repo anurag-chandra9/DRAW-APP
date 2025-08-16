@@ -32,13 +32,20 @@ export function Canvas({
   }, [canvasRef]);
 
   return (
-    <div style={{ height: "100vh", overflow: "hidden" }}>
+    <div className="relative h-screen w-screen overflow-hidden">
+      {/* Canvas as background */}
       <canvas
         ref={canvasRef}
+        className="absolute top-0 left-0 z-0"
         width={window.innerWidth}
         height={window.innerHeight}
       ></canvas>
-      <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
+
+      {/* Toolbar on top */}
+      <Topbar
+        setSelectedTool={setSelectedTool}
+        selectedTool={selectedTool}
+      />
     </div>
   );
 }
@@ -51,24 +58,29 @@ function Topbar({
   setSelectedTool: (s: Tool) => void;
 }) {
   return (
-    <div style={{ position: "fixed", top: 10, left: 10 }}>
-      <div className="flex gap-t">
-        <IconButton
-          onClick={() => setSelectedTool("pencil")}
-          activated={selectedTool === "pencil"}
-          icon={<Pencil />}
-        />
-        <IconButton
-          onClick={() => setSelectedTool("rect")}
-          activated={selectedTool === "rect"}
-          icon={<RectangleHorizontalIcon />}
-        />
-        <IconButton
-          onClick={() => setSelectedTool("circle")}
-          activated={selectedTool === "circle"}
-          icon={<Circle />}
-        />
-      </div>
+    <div
+      className="
+        fixed top-5 left-5 z-10
+        flex gap-2
+        bg-white/90 backdrop-blur-md
+        shadow-lg rounded-xl px-3 py-2
+      "
+    >
+      <IconButton
+        onClick={() => setSelectedTool("pencil")}
+        activated={selectedTool === "pencil"}
+        icon={<Pencil />}
+      />
+      <IconButton
+        onClick={() => setSelectedTool("rect")}
+        activated={selectedTool === "rect"}
+        icon={<RectangleHorizontalIcon />}
+      />
+      <IconButton
+        onClick={() => setSelectedTool("circle")}
+        activated={selectedTool === "circle"}
+        icon={<Circle />}
+      />
     </div>
   );
 }

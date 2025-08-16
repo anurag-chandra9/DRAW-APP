@@ -10,13 +10,14 @@ export function IconButton({
   activated: boolean;
 }) {
   return (
-    <div
-      className={`m-2 cursor-pointer rounded-full border p-2 bg-black hover:bg-gray-700 ${
-        activated ? "text-red-400" : "text-white"
-      }`}
+    <button
       onClick={onClick}
+      className={`
+        p-2 rounded-full border transition-colors
+        ${activated ? "bg-red-500 text-white" : "bg-black text-white hover:bg-gray-700"}
+      `}
     >
       {icon}
-    </div>
+    </button>
   );
 }
